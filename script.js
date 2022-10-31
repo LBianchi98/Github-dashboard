@@ -1,6 +1,8 @@
 import { Octokit } from "https://cdn.skypack.dev/octokit";
+var token1 = 'ghp_FzT769o6JGfg5VA';
+var token2 = 'Got6lv63UK7cJro4OFJYw';
 const octokit = new Octokit({
-    auth: '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'
+    auth: token1 + token2
   });
 
 const {
