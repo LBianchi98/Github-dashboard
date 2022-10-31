@@ -1,6 +1,6 @@
 import { Octokit } from "https://cdn.skypack.dev/octokit";
 const octokit = new Octokit({
-    auth: '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'
+    auth: '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'
   });
 
 const {
