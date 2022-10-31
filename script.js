@@ -1,41 +1,36 @@
-import { Octokit, App } from "https://cdn.skypack.dev/octokit";
+import { Octokit } from "https://cdn.skypack.dev/octokit";
 const octokit = new Octokit({
-    auth: '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'
+    auth: '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'
   });
 
 const {
   data: { login },
 } = await octokit.rest.users.getAuthenticated();
-console.log("Hello, %s", login);
-
-const responseRepos = await octokit.request('GET /users/{username}/repos', {
-  username: 'LBianchi98'
-});
+const responseRepos = await octokit.request('GET /user/repos', {});
 const repos = responseRepos.data;
 const container = document.getElementById("tbody");
-repos.forEach(element => {
-  const url = element.commits_url.substring(0, element.commits_url.length - 6);//eliminate {/sha} from url
-  fetch(url).then((response) => response.json()).then((data) => {
-    let dataUnfixed = data[0].commit.committer.date.toString();
-    let dataFixed = dataUnfixed.slice(8,10) + '-' + dataUnfixed.slice(5,7) + '-' + dataUnfixed.slice(0,4);
-    let tr = document.createElement("tr");
-    if(!element.active)
-      tr.className = "active"
-    else tr.className = "archived"
-    
-    let tdName = document.createElement("td");
-    let tdDate = document.createElement("td");
-    var name = document.createTextNode(element.name);
-    var date = document.createTextNode(dataFixed);
-    tdName.appendChild(name);
-    tdDate.appendChild(date);
-    tr.appendChild(tdName);
-    tr.appendChild(tdDate);
-    container.appendChild(tr);
-  });
-  
-  
+repos.forEach(async element => {
+  const url = element.commits_url.substring(22, element.commits_url.length - 6);//eliminate {/sha} from url
+  const response = await octokit.request('GET ' + url, { });
+  const data = response.data;
+  let dataUnfixed = data[0].commit.committer.date.toString();
+  let dataFixed = dataUnfixed.slice(8,10) + '-' + dataUnfixed.slice(5,7) + '-' + dataUnfixed.slice(0,4);
+  let tr = document.createElement("tr");
+  if(!element.archived)
+    tr.className = "active"
+  else tr.className = "archived"
+  let tdName = document.createElement("td");
+  let tdDate = document.createElement("td");
+  var name = document.createTextNode(element.name);
+  var date = document.createTextNode(dataFixed);
+  tdName.appendChild(name);
+  tdDate.appendChild(date);
+  tr.appendChild(tdName);
+  tr.appendChild(tdDate);
+  container.appendChild(tr);
 });
+  
+
 
 document.getElementById("btnArchived").addEventListener("click", getArchived);
 document.getElementById("btnActive").addEventListener("click", getActive);
