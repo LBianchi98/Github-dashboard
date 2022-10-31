@@ -1,6 +1,6 @@
 import { Octokit, App } from "https://cdn.skypack.dev/octokit";
 const octokit = new Octokit({
-    auth: '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'
+    auth: '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'
   });
 
 const {
@@ -41,6 +41,7 @@ document.getElementById("btnArchived").addEventListener("click", getArchived);
 document.getElementById("btnActive").addEventListener("click", getActive);
 document.getElementById("sortName").addEventListener("click", sortName);
 document.getElementById("sortDate").addEventListener("click", sortDate);
+document.getElementById("searchBtn").addEventListener("click", search);
 function getArchived(){
   const allRepos = document.getElementsByTagName("tr");
   for(let element of allRepos){
@@ -115,6 +116,29 @@ function sortDate() {
    if (shouldSwitch) {
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
       switching = true;
+    }
+  }
+}
+function search() {
+  const actives = document.getElementsByClassName("active");
+  const archiveds = document.getElementsByClassName("archived");
+  const val = document.getElementById('searchInput').value;
+  var re = new RegExp(val, 'gi');
+  console.log(re)
+  for(let element of actives){
+    if(element.firstChild.innerHTML.match(re) == null){
+      element.style.display = 'none';
+    }
+    else{
+      element.style.display = 'table-row';
+    }
+  }
+  for(let element of archiveds){
+    if(element.firstChild.innerHTML.match(re) == null){
+      element.style.display = 'none';
+    }
+    else{
+      element.style.display = 'table-row';
     }
   }
 }
