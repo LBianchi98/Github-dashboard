@@ -19,6 +19,10 @@ repos.forEach(element => {
     let dataUnfixed = data[0].commit.committer.date.toString();
     let dataFixed = dataUnfixed.slice(8,10) + '-' + dataUnfixed.slice(5,7) + '-' + dataUnfixed.slice(0,4);
     let tr = document.createElement("tr");
+    if(!element.active)
+      tr.className = "active"
+    else tr.className = "archived"
+    
     let tdName = document.createElement("td");
     let tdDate = document.createElement("td");
     var name = document.createTextNode(element.name);
@@ -38,25 +42,25 @@ document.getElementById("btnActive").addEventListener("click", getActive);
 document.getElementById("sortName").addEventListener("click", sortName);
 document.getElementById("sortDate").addEventListener("click", sortDate);
 function getArchived(){
-  const allRepos = document.getElementsByTagName("p");
+  const allRepos = document.getElementsByTagName("tr");
   for(let element of allRepos){
     
     if(element.className == "archived"){
-      element.style.display = 'inline';
+      element.style.display = 'table-row';
     }
-    else{
+    else if(element.className == "active"){
       
       element.style.display = 'none';
     }
   }
 }
 function getActive(){
-  const allRepos = document.getElementsByTagName("p");
+  const allRepos = document.getElementsByTagName("tr");
   for(let element of allRepos){
     if(element.className == "active"){
-      element.style.display = 'inline';
+      element.style.display = 'table-row';
     }
-    else{
+    else if(element.className == "archived"){
       
       element.style.display = 'none';
     }
